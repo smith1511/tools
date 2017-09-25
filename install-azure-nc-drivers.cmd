@@ -2,7 +2,7 @@ set driver_version=385.08
 set driver_filename=%driver_version%-tesla-desktop-winserver2016-international-whql.exe
 
 rem If already installed, skip
-if exist initialised.txt exit /b 0
+if exist init.txt exit /b 0
 
 rem Install Chocolatey - https://chocolatey.org 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
@@ -20,11 +20,11 @@ rem Extract and install NVIDIA drivers
 7z x -y %driver_filename%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-setup.exe -s -forcereboot
+setup.exe -s
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem Write a flag so we know we're done
-echo done > initialised.txt
+echo done > init.txt
 
 rem Initiate a reboot of the VM
-start shutdown /r /t 300
+start shutdown /r /t 5
