@@ -1,11 +1,11 @@
 param (
-    [int]start = 1,
-    [int]end = 1,
-    [string]outputName = "images\image.jpg",
-    [int]width = 800,
-    [int]height = 600,
-    [string]sceneFile,
-    [int]nodeCount
+    [int]$start = 1,
+    [int]$end = 1,
+    [string]$outputName = "images\image.jpg",
+    [int]$width = 800,
+    [int]$height = 600,
+    [string]$sceneFile,
+    [int]$nodeCount
 )
 
 $port = 20207
