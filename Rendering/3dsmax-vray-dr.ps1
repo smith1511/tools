@@ -42,6 +42,10 @@ vr=renderers.current
 vr.system_distributedRender=true
 "@ | Out-File $pre_render_script
 
+# Create folder for outputs
 mkdir images
 
+# Render
 3dsmaxcmdio.exe -secure off -v:5 -rfw:0 -preRenderScript:$pre_render_script -start:$start -end:$end -outputName:"$outputName" -width:$width -height:$height "$sceneFile"
+
+exit $lastexitcode
