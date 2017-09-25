@@ -34,6 +34,7 @@ use_cached_assets 1
 cache_limit_type 2
 cache_limit 100.000000
 "@ | Out-File -Append $vraydr_file
+New-Item "$env:LOCALAPPDATA\Autodesk\3dsMax\2018 - 64bit\ENU\en-US\plugcfg" -ItemType Directory
 cp $vraydr_file "$env:LOCALAPPDATA\Autodesk\3dsMax\2018 - 64bit\ENU\en-US\plugcfg\vray_dr.cfg"
 
 # Create preRender script to enable distributed rendering in the scene
