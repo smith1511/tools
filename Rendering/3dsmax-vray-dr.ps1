@@ -4,12 +4,20 @@ param (
     [string]outputName = "images\image.jpg",
     [int]width = 800,
     [int]height = 600,
-    [string]sceneFile
+    [string]sceneFile,
+    [int]nodeCount
 )
 
 $port = 20207
 $vraydr_file = "vray_dr.cfg"
 $pre_render_script = "enable-dr.ms"
+
+$hosts = $env:AZ_BATCH_HOST_LIST.Split(",")
+
+if ($hosts.Count -ne $nodeCount) {
+    Write-Host "Host count $hosts.Count must equal nodeCount $nodeCount"
+    exit 1
+}
 
 $env:AZ_BATCH_HOST_LIST.Split(",") | ForEach {
     "$_ $port" | Out-File -Append $vraydr_file
