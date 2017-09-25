@@ -36,4 +36,4 @@ vr.system_distributedRender=true
 
 mkdir images
 
-3dsmaxcmdio.exe -secure off -v:5 -rfw:0 -start:$start -end:$end -outputName:"$outputName" -w $width -h $height "$sceneFile"
+3dsmaxcmdio.exe -secure off -v:5 -rfw:0 -preRenderScript:$pre_render_script -start:$start -end:$end -outputName:"$outputName" -width:$width -height:$height "$sceneFile"
