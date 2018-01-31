@@ -41,6 +41,8 @@ cp $vraydr_file "$env:LOCALAPPDATA\Autodesk\3dsMax\2018 - 64bit\ENU\en-US\plugcf
 @"
 vr=renderers.current
 vr.system_distributedRender=true
+vr.system_vrayLog_level=4
+vr.system_vrayLog_file="%AZ_BATCH_TASK_WORKING_DIR%\VRayLog.txt"
 "@ | Out-File $pre_render_script
 
 # Create folder for outputs
