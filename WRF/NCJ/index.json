@@ -1,0 +1,17 @@
+[
+    {
+        "id": "compile-and-publish-wrf",
+        "name": "Compile and publish WRF",
+        "description": "This template will compile the latest version of WRF and publish it to your blob storage account"
+    },
+    {
+        "id": "import-geography-files",
+        "name": "Import the WRF geography files to you storage account",
+        "description": "Downloads the WRF geography files and uploads them to your storage account"
+    },
+    {
+        "id": "wrf",
+        "name": "Run WRF",
+        "description": "Run WRF"
+    } 
+]

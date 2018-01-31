@@ -1,0 +1,105 @@
+{
+    "templateMetadata": {
+        "description": "Application template for working with WRF."
+    },
+    "parameters": {
+        "poolId": {
+            "type": "string",
+            "defaultValue": "compile-and-publish-wrf",
+            "metadata": {
+                "description": "The ID of the pool on which to run the job."
+            }
+        },
+        "jobName": {
+            "type": "string",
+            "defaultValue": "compile-and-publish-wrf",
+            "metadata": {
+                "description": "The unique name of the job."
+            }
+        },
+        "wrfCompileScriptUrl": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/smith1511/tools/master/WRF/compile-wrf.sh",
+            "metadata": {
+                "description": "The link to a script to compile WRF"
+            }
+        },
+        "outputFilegroup": {
+            "type": "string",
+            "metadata": {
+                "description": "The file group where geography files will be stored",
+                "advancedType": "file-group"
+            }
+        }
+    },
+    "job": {
+        "type": "Microsoft.Batch/batchAccounts/jobs",
+        "properties": {
+            "id": "[parameters('jobName')]",
+            "poolInfo": {
+                "poolId": "[parameters('poolId')]"
+            },
+            "taskFactory": {
+                "type": "taskCollection",
+                "tasks": [
+                    {
+                        "id": "compile-and-publish-wrf",
+                        "displayName": "compile-and-publish-wrf",
+                        "commandLine": "/bin/bash -c compile-wrf.sh",
+                        "userIdentity": {
+                            "autoUser": {
+                                "elevationLevel": "admin",
+                                "scope": "pool"
+                            }
+                        },
+                        "resourceFiles": [
+                            {
+                                "blobSource": "[parameters('wrfCompileScriptUrl')]",
+                                "filePath": "compile-wrf.sh"
+                            }
+                        ],
+                        "outputFiles": [
+                            {
+                                "filePattern": "../stdout.txt",
+                                "destination": {
+                                    "autoStorage": {
+                                        "fileGroup": "[parameters('outputFilegroup')]",
+                                        "path": "[parameters('jobName')]/logs/stdout.txt"
+                                    }
+                                },
+                                "uploadOptions": {
+                                    "uploadCondition": "taskCompletion"
+                                }
+                            },
+                            {
+                                "filePattern": "../stderr.txt",
+                                "destination": {
+                                    "autoStorage": {
+                                        "fileGroup": "[parameters('outputFilegroup')]",
+                                        "path": "[parameters('jobName')]/logs/stderr.txt"
+                                    }
+                                },
+                                "uploadOptions": {
+                                    "uploadCondition": "taskCompletion"
+                                }
+                            },
+                            {
+                                "filePattern": "wrf.tar.gz",
+                                "destination": {
+                                    "autoStorage": {
+                                        "fileGroup": "[parameters('outputFilegroup')]",
+                                        "path": "wrf.tar.gz"
+                                    }
+                                },
+                                "uploadOptions": {
+                                    "uploadCondition": "taskSuccess"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "onAllTasksComplete": "terminateJob"
+        }
+    }
+}

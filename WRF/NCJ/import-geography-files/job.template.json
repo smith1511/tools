@@ -1,0 +1,99 @@
+{
+    "templateMetadata": {
+        "description": "Application template for working with WRF."
+    },
+    "parameters": {
+        "poolId": {
+            "type": "string",
+            "defaultValue": "import-geography-files",
+            "metadata": {
+                "description": "The ID of the pool on which to run the job."
+            }
+        },
+        "jobName": {
+            "type": "string",
+            "defaultValue": "import-geography-files",
+            "metadata": {
+                "description": "The unique name of the job."
+            }
+        },
+        "geographyFilesUrl": {
+            "type": "string",
+            "defaultValue": "http://www2.mmm.ucar.edu/wrf/src/wps_files/geog_complete.tar.gz",
+            "metadata": {
+                "description": "The link to the geography files"
+            }
+        },
+        "outputFilegroup": {
+            "type": "string",
+            "metadata": {
+                "description": "The file group where geography files will be stored",
+                "advancedType": "file-group"
+            }
+        }
+    },
+    "job": {
+        "type": "Microsoft.Batch/batchAccounts/jobs",
+        "properties": {
+            "id": "[parameters('jobName')]",
+            "poolInfo": {
+                "poolId": "[parameters('poolId')]"
+            },
+            "taskFactory": {
+                "type": "taskCollection",
+                "tasks": [
+                    {
+                        "id": "import-geography-files",
+                        "displayName": "import-geography-files",
+                        "commandLine": "/bin/bash -c 'ls -l'",
+                        "resourceFiles": [
+                            {
+                                "blobSource": "[parameters('geographyFilesUrl')]",
+                                "filePath": "geog.tar.gz"
+                            }
+                        ],
+                        "outputFiles": [
+                            {
+                                "filePattern": "../stdout.txt",
+                                "destination": {
+                                    "autoStorage": {
+                                        "fileGroup": "[parameters('outputFilegroup')]",
+                                        "path": "[parameters('jobName')]/logs/stdout.txt"
+                                    }
+                                },
+                                "uploadOptions": {
+                                    "uploadCondition": "taskCompletion"
+                                }
+                            },
+                            {
+                                "filePattern": "../stderr.txt",
+                                "destination": {
+                                    "autoStorage": {
+                                        "fileGroup": "[parameters('outputFilegroup')]",
+                                        "path": "[parameters('jobName')]/logs/stderr.txt"
+                                    }
+                                },
+                                "uploadOptions": {
+                                    "uploadCondition": "taskCompletion"
+                                }
+                            },
+                            {
+                                "filePattern": "geog.tar.gz",
+                                "destination": {
+                                    "autoStorage": {
+                                        "fileGroup": "[parameters('outputFilegroup')]",
+                                        "path": "geog.tar.gz"
+                                    }
+                                },
+                                "uploadOptions": {
+                                    "uploadCondition": "taskSuccess"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "onAllTasksComplete": "terminateJob"
+        }
+    }
+}
