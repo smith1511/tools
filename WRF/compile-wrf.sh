@@ -12,9 +12,9 @@ NETCDF_VERSION=4.4.1.1
 NETCDF_FORTRAN_VERSION=4.4.4
 NETCDF_CXX_VERSION=4.3.0
 
-#sudo yum install -y epel-release
-#sudo yum update -y
-#sudo yum group install -y "Development Tools"
+sudo yum install -y epel-release
+sudo yum update -y
+sudo yum group install -y "Development Tools"
 
 # Comiler and flags
 export CC=gcc
