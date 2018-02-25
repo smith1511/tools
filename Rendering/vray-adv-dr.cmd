@@ -8,4 +8,14 @@ rem Install Backburner if available.
 start /wait msiexec /i Backburner.msi /qn
 
 rem start vray spawner
-"C:\Autodesk\3ds Max 2018\vrayspawner2018.exe" -port=%port%
+start "vrayspawner" "C:\Autodesk\3ds Max 2018\vrayspawner2018.exe" -port=%port%
+
+:waitforproc
+tasklist|find "3dsmaxio.exe"
+IF %ERRORLEVEL% = 0 THEN (GOTO done)
+TIMEOUT /T 1
+GOTO waitforproc
+
+:done
+TIMEOUT /T 15
+exit /b 0
